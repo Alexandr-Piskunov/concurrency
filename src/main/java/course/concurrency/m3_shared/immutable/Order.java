@@ -17,31 +17,36 @@ public class Order implements ImmutableOrder {
         this.items = items;
         this.status = Status.NEW;
     }
-
-    public Order(ImmutableOrder order, PaymentInfo paymentInfo) {
-        this.id = order.getId();
-        this.items = order.getItems();
+    private Order(long id, List<Item> items, PaymentInfo paymentInfo, boolean packed, Status status) {
+        this.id = id;
+        this.items = items;
         this.paymentInfo = paymentInfo;
-        this.isPacked = order.isPacked();
-        this.status = Status.IN_PROGRESS;
-    }
-
-    public Order(ImmutableOrder order, boolean packed) {
-        this.id = order.getId();
-        this.items = order.getItems();
-        this.paymentInfo = order.getPaymentInfo();
         this.isPacked = packed;
-        this.status = Status.IN_PROGRESS;
-    }
-
-    public Order(ImmutableOrder order, Status status) {
-        this.id = order.getId();
-        this.items = order.getItems();
-        this.paymentInfo = order.getPaymentInfo();
-        this.isPacked = order.isPacked();
         this.status = status;
     }
+    public Order withPaymentInfo(PaymentInfo paymentInfo){
+        return new Order(this.id,
+                this.items,
+                paymentInfo,
+                this.isPacked,
+                Status.IN_PROGRESS);
+    }
 
+    public Order withPacked(boolean packed) {
+        return new Order(this.id,
+                this.items,
+                this.paymentInfo,
+                packed,
+                Status.IN_PROGRESS);
+    }
+
+    public Order withStatus(Status status){
+        return new Order(this.id,
+                this.items,
+                this.paymentInfo,
+                this.isPacked,
+                status);
+    }
 
     public boolean checkStatus() {
         if (this.items != null && !this.items.isEmpty() && this.paymentInfo != null && this.isPacked) {

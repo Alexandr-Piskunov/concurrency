@@ -15,4 +15,9 @@ public interface ImmutableOrder {
     boolean checkStatus();
 
     boolean isPacked();
+    Order withPaymentInfo(PaymentInfo paymentInfo);
+
+    Order withPacked(boolean packed);
+
+    Order withStatus(Order.Status status);
 }

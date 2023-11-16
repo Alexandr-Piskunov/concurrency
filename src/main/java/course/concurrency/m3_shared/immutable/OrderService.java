@@ -22,14 +22,14 @@ public class OrderService {
     }
 
     public void updatePaymentInfo(long orderId, PaymentInfo paymentInfo) {
-        currentOrders.computeIfPresent(orderId, (key, value) -> new Order(currentOrders.get(orderId), paymentInfo));
+        currentOrders.computeIfPresent(orderId, (key, value) -> value.withPaymentInfo(paymentInfo));
         if (currentOrders.get(orderId).checkStatus()) {
             deliver(currentOrders.get(orderId));
         }
     }
 
     public void setPacked(long orderId) {
-        currentOrders.computeIfPresent(orderId, (key, value) -> new Order(currentOrders.get(orderId), true));
+        currentOrders.computeIfPresent(orderId, (key, value) -> value.withPacked(true));
         if (currentOrders.get(orderId).checkStatus()) {
             deliver(currentOrders.get(orderId));
         }
@@ -37,7 +37,7 @@ public class OrderService {
 
     private void deliver(ImmutableOrder order) {
         /* ... */
-        currentOrders.computeIfPresent(order.getId(), (key, value) -> new Order(currentOrders.get(order.getId()), Order.Status.DELIVERED));
+        currentOrders.computeIfPresent(order.getId(), (key, value) -> value.withStatus(Order.Status.DELIVERED));
     }
 
     public boolean isDelivered(long orderId) {
