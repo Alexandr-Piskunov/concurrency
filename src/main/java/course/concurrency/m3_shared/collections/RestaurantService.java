@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 
 public class RestaurantService {
 
@@ -13,10 +15,10 @@ public class RestaurantService {
         put("C", new Restaurant("C"));
     }};
 
-    private ConcurrentHashMap<String, Integer> stat = new ConcurrentHashMap<>() {{
-        put("A", 0);
-        put("B", 0);
-        put("C", 0);
+    private ConcurrentHashMap<String, LongAdder> stat = new ConcurrentHashMap<>() {{
+        put("A", new LongAdder());
+        put("B", new LongAdder());
+        put("C", new LongAdder());
     }};
 
     public Restaurant getByName(String restaurantName) {
@@ -26,7 +28,7 @@ public class RestaurantService {
 
     public void addToStat(String restaurantName) {
         stat.computeIfPresent(restaurantName, (key, value) -> {
-            value += 1;
+            value.increment();
             return value;
         });
     }
