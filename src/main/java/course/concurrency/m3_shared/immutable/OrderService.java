@@ -24,20 +24,20 @@ public class OrderService {
     public void updatePaymentInfo(long orderId, PaymentInfo paymentInfo) {
         var newImmutableOrder = currentOrders.computeIfPresent(orderId, (key, value) -> value.withPaymentInfo(paymentInfo));
         if (newImmutableOrder != null && newImmutableOrder.checkStatus()) {
-            deliver(newImmutableOrder);
+            deliver(newImmutableOrder.withStatus(Order.Status.DELIVERED));
         }
     }
 
     public void setPacked(long orderId) {
         var newImmutableOrder = currentOrders.computeIfPresent(orderId, (key, value) -> value.withPacked(true));
         if (newImmutableOrder != null && newImmutableOrder.checkStatus()) {
-            deliver(newImmutableOrder);
+            deliver(newImmutableOrder.withStatus(Order.Status.DELIVERED));
         }
     }
 
     private void deliver(ImmutableOrder order) {
         /* ... */
-        currentOrders.computeIfPresent(order.getId(), (key, value) -> value.withStatus(Order.Status.DELIVERED));
+        currentOrders.put(order.getId(), order);
     }
 
     public boolean isDelivered(long orderId) {
