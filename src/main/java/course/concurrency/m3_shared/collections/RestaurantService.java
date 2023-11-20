@@ -1,5 +1,6 @@
 package course.concurrency.m3_shared.collections;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -9,13 +10,13 @@ import java.util.concurrent.atomic.LongAdder;
 
 public class RestaurantService {
 
-    private Map<String, Restaurant> restaurantMap = new ConcurrentHashMap<>() {{
+    private Map<String, Restaurant> restaurantMap = new HashMap<>() {{
         put("A", new Restaurant("A"));
         put("B", new Restaurant("B"));
         put("C", new Restaurant("C"));
     }};
 
-    private ConcurrentHashMap<String, LongAdder> stat = new ConcurrentHashMap<>() {{
+    private Map<String, LongAdder> stat = new HashMap<>() {{
         put("A", new LongAdder());
         put("B", new LongAdder());
         put("C", new LongAdder());
